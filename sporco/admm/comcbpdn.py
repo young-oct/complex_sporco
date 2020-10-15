@@ -19,7 +19,7 @@ import sporco.linalg as sl
 import sporco.prox as sp
 from sporco.util import u
 from sporco.fft import (rfftn, irfftn, fftn, ifftn,
-                        empty_aligned, rfftn_empty_aligned,fftn_empty_aligned,
+                        empty_aligned, rfftn_empty_aligned,
                         rfl2norm2,fl2norm2)
 from sporco.signal import gradient_filters
 
