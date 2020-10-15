@@ -618,4 +618,4 @@ class ComplexConvBPDN(ComplexGenericConvBPDN):
         rl1 = rl1.astype(complex)
         return (self.lmbda*rl1, rl1)
 
-"hi"
+"test"
