@@ -596,8 +596,6 @@ class ComplexConvBPDN(ComplexGenericConvBPDN):
             # boyd-2010-distributed) is satisfied.
             return (self.lmbda/self.rho)*np.sign(self.Y)
 
-
-
     def ystep(self):
         r"""Minimise Augmented Lagrangian with respect to
         :math:`\mathbf{y}`."""
@@ -605,8 +603,6 @@ class ComplexConvBPDN(ComplexGenericConvBPDN):
         self.Y = sp.Complex_prox_l1(self.AX + self.U,
                             (self.lmbda / self.rho) * self.wl1)
         super(ComplexConvBPDN, self).ystep()
-
-
 
     def obfn_reg(self):
         """Compute regularisation term and contribution to objective
