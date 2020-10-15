@@ -621,9 +621,6 @@ class ConvBPDN(GenericConvBPDN):
         return (self.lmbda*rl1, rl1)
 
 
-
-
-
 class ConvBPDNJoint(ConvBPDN):
     r"""
     ADMM algorithm for Convolutional BPDN with joint sparsity via an
@@ -1384,10 +1381,6 @@ class ConvBPDNProjL1(GenericConvBPDN):
                                                 self.cri.axisM))
         cns = np.linalg.norm(prj - self.obfn_gvar())
         return (dfd, cns)
-
-
-
-
 
 class ConvTwoBlockCnstrnt(admm.ADMMTwoBlockCnstrnt):
     r"""

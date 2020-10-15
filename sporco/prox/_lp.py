@@ -178,7 +178,32 @@ def prox_l1(v, alpha):
     else:
         return np.sign(v) * (np.clip(np.abs(v) - alpha, 0, float('Inf')))
 
+def Complex_prox_l1(v, alpha):
+    r"""Compute the complex proximal operator of the :math:`\ell_1` norm (scalar
+    shrinkage/soft thresholding)
 
+    Parameters
+    ----------
+    v : array_like
+      Input array :math:`\mathbf{v}`
+    alpha : float or array_like
+      Parameter :math:`\alpha`
+
+    Returns
+    -------
+    x : ndarray
+      Output array
+    """
+
+    if have_numexpr:
+        return ne.evaluate(
+            'where(abs(v)-alpha > 0, where(v >= 0, 1, -1) * (abs(v)-alpha), 0)'
+        )
+    else:
+
+
+        #nan issue
+        return (v/np.abs(v)) * (np.clip(np.abs(v) - alpha, 0, complex(float('inf'), float('inf'))))
 
 def norm_2l2(x, axis=None):
     r"""Compute the squared :math:`\ell_2` norm

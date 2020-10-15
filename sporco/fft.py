@@ -181,7 +181,47 @@ def rfftn_empty_aligned(shape, axes, dtype, order='C', n=None):
     cdtype = complex_dtype(dtype)
     return pyfftw.empty_aligned(ashp, cdtype, order, n)
 
+#young's edit
+@renamed_function(depname='pyfftw_fftn_empty_aligned', depmod='sporco.linalg')
+def fftn_empty_aligned(shape, axes, dtype, order='C', n=None):
+    """Construct an empty byte-aligned array for complex FFTs.
 
+    Construct an empty byte-aligned array for efficient use by :mod:`pyfftw`
+    functions :func:`pyfftw.interfaces.numpy_fft.rfftn` and
+    :func:`pyfftw.interfaces.numpy_fft.irfftn`. The shape of the
+    empty array is appropriate for the output of
+    :func:`pyfftw.interfaces.numpy_fft.rfftn` applied
+    to an array of the shape specified by parameter `shape`, and for the
+    input of the corresponding :func:`pyfftw.interfaces.numpy_fft.irfftn`
+    call that reverses this operation.
+
+    Parameters
+    ----------
+    shape : sequence of ints
+      Output array shape
+    axes : sequence of ints
+      Axes on which the FFT will be computed
+    dtype : dtype
+      Real dtype from which the complex dtype of the output array is derived
+    order : {'C', 'F'}, optional (default 'C')
+      Specify whether arrays should be stored in row-major (C-style) or
+      column-major (Fortran-style) order
+    n : int, optional (default None)
+      Output array should be aligned to n-byte boundary
+
+    Returns
+    -------
+    a :  ndarray
+      Empty array with required byte-alignment
+    """
+
+    ashp = list(shape)
+    raxis = axes[-1]
+    ashp[raxis] = ashp[raxis] // 2 + 1
+    cdtype = complex_dtype(dtype)
+    # cdtype = dtype
+    return pyfftw.empty_aligned(ashp, cdtype, order, n)
+#end of young's edit
 
 @renamed_function(depname='fftn', depmod='sporco.linalg')
 def fftn(a, s=None, axes=None):
@@ -486,7 +526,7 @@ def rfl2norm2(xf, xs, axis=(0, 1)):
 if not have_pyfftw:
 
     __all__ = ['complex_dtype', 'real_dtype', 'byte_aligned', 'empty_aligned',
-               'rfftn_empty_aligned', 'fftn', 'ifftn', 'rfftn', 'irfftn',
+               'rfftn_empty_aligned','fftn_empty_aligned' ,'fftn', 'ifftn', 'rfftn', 'irfftn',
                'dctii', 'idctii', 'fftconv', 'fl2norm2', 'rfl2norm2']
 
     def _aligned(array, dtype=None, n=None):
@@ -510,7 +550,17 @@ if not have_pyfftw:
         return np.empty(ashp, dtype=cdtype)
     _rfftn_empty.__doc__ = rfftn_empty_aligned.__doc__
     rfftn_empty_aligned = _rfftn_empty
-
+#young's edit
+    def _fftn_empty(shape, axes, dtype, order='C', n=None):
+        ashp = list(shape)
+        raxis = axes[-1]
+        ashp[raxis] = ashp[raxis] // 2 + 1
+        cdtype = complex_dtype(dtype)
+        # cdtype = dtype
+        return np.empty(ashp, dtype=cdtype)
+    _fftn_empty.__doc__ = fftn_empty_aligned.__doc__
+    fftn_empty_aligned = _fftn_empty
+#end of  young's edit
     def _fftn(a, s=None, axes=None):
         return  npfft.fftn(a, s, axes).astype(complex_dtype(a.dtype))
     _fftn.__doc__ = fftn.__doc__
