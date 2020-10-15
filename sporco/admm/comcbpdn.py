@@ -617,5 +617,3 @@ class ComplexConvBPDN(ComplexGenericConvBPDN):
         #convert into complex number
         rl1 = rl1.astype(complex)
         return (self.lmbda*rl1, rl1)
-
-"test"
