@@ -24,11 +24,13 @@ import numpy as np
 from sporco.admm import bpdn
 from sporco import util
 from sporco import plot
+from sporco import mpiutil
 
 
 """
 Configure problem size, sparsity, and noise level.
 """
+
 
 N = 512      # Signal size
 M = 4*N      # Dictionary size
@@ -71,14 +73,13 @@ def evalerr(prm):
     x = b.solve()
     return np.sum(np.abs(x-x0))
 
-
 # Parallel evalution of error function on lmbda grid
+
 lrng = np.logspace(1, 2, 20)
 sprm, sfvl, fvmx, sidx = util.grid_search(evalerr, (lrng,))
 lmbda = sprm[0]
 
 print('Minimum ℓ1 error: %5.2f at 𝜆 = %.2e' % (sfvl, lmbda))
-
 
 """
 Once the best $\lambda$ has been determined, run BPDN with verbose display of ADMM iteration statistics.
@@ -120,6 +121,3 @@ plot.plot(its.Rho, xlbl='Iterations', ylbl='Penalty Parameter', fig=fig)
 fig.show()
 
 
-
-# Wait for enter on keyboard
-input()
