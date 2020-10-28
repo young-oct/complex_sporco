@@ -14,7 +14,7 @@ different centre frequencies: 200 independent 128 points long  gaussine  wave.
 The initial dictionary is random number. After the dictionary learning
 the updated dictionary should be  gaussine pulse
 
-input signal layout: [128x1x1x100], 200 independent 128 points long  gaussine  pulse.
+input signal layout: [128x1x1x100], 100 independent 128 points long  gaussine  pulse.
 ditctionary layput: [128x1x1x5], 5 filters with 128 points long
 
 """
