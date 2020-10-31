@@ -19,8 +19,6 @@ import numpy as np
 from sporco.admm import comcbpdn, cbpdn,comccmod
 from scipy import signal
 from sporco import signal as si
-from tqdm import tqdm
-from sporco import fft
 from sporco import plot,cnvrep
 from sporco.dictlrn import dictlrn
 from sporco import mpiutil
