@@ -27,10 +27,7 @@ from matplotlib import pyplot as plt
 
 import random
 from numpy.fft import fft, fft2, ifft, ifft2,fftn,ifftn
-from sklearn.metrics import r2_score
-import pickle
-import copy
-from math import ceil
+
 
 
 np.seterr(divide='ignore', invalid='ignore')
