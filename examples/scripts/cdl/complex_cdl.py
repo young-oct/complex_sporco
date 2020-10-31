@@ -42,7 +42,7 @@ def reconstruct(D,x,cri):
 def evalerr(prm):
     dimN=1
     lmbda = prm[0]
-    b = comcbpdn.ComplexConvBPDN(D0, s_test, lmbda, opt=opt_par, dimK=None, dimN=dimN)
+    b = comcbpdn.ComplexConvBPDN(D0_d, s_test, lmbda, opt=opt_par, dimK=None, dimN=dimN)
     x_0 = b.solve()
     x_1 = x_0.squeeze()
 
@@ -99,9 +99,9 @@ s_test = s_noise[:,:,:,0].squeeze()
 s_test = s_test[:,np.newaxis]
 
 D0 = np.reshape(D0,(-1,1,1,M))
-
+D0_d = D0.squeeze()
+#
 # Parallel evaluation of error function on lmbda grid
-
 # lrng = np.logspace(-5,3,1000)
 # sprm, sfvl, fvmx, sidx = mpiutil.grid_search(evalerr, (lrng,))
 # lmbda = sprm[0]
@@ -110,8 +110,8 @@ D0 = np.reshape(D0,(-1,1,1,M))
 # plot.plot(fvmx, x=lrng, ptyp='semilogx',title='original 𝜆 = %.2e' % lmbda, xlbl='$\lambda$',
 #           ylbl='Error', fig=fig)
 # fig.show()
-lmbda = 1.55
-
+lmbda = 3.89
+#
 cri = cnvrep.CDU_ConvRepIndexing(D0.shape, s_noise)
 
 optx = comcbpdn.ComplexConvBPDN.Options({'Verbose': False, 'MaxMainIter': 1,
@@ -138,7 +138,7 @@ xstep = comcbpdn.ComplexConvBPDN(D0n, s_noise, lmbda, optx)
 #Create D update object.
 dstep = comccmod.ComConvCnstrMOD(None, s_noise, D0.shape, optd, method='cns')
 #
-opt = dictlrn.DictLearn.Options({'Verbose': True, 'MaxMainIter':1000})
+opt = dictlrn.DictLearn.Options({'Verbose': True, 'MaxMainIter':500})
 d = dictlrn.DictLearn(xstep, dstep, opt)
 D1 = d.solve()
 x = d.getcoef()
@@ -166,7 +166,6 @@ fig.show()
 
 # s_test = s_noise[:,:,:,np.random.randint(0,K)].squeeze()
 
-D0_d = D0.squeeze()
 D1_d = D1.squeeze()
 s_clean_d = s_clean.squeeze()
 s_noise_d = s_noise.squeeze()
@@ -175,17 +174,17 @@ opt_par['FastSolve'] = False
 opt_par['Verbose'] = False
 
 # calculate sparse representation with initial, learned and ground truth dictionaries
-b_i = comcbpdn.ComplexConvBPDN(D0_d, s_test, lmbda / 2, opt=opt_par, dimK=None, dimN=1)
+b_i = comcbpdn.ComplexConvBPDN(D0_d, s_test, lmbda/2, opt=opt_par, dimK=None, dimN=1)
 x_i = b_i.solve()
 rec_i = b_i.reconstruct().squeeze()
 its_i = b_i.getitstat()
 
-b_l = comcbpdn.ComplexConvBPDN(D1_d, s_test, lmbda / 2, opt=opt_par, dimK=None, dimN=1)
+b_l = comcbpdn.ComplexConvBPDN(D1_d, s_test, lmbda/2 , opt=opt_par, dimK=None, dimN=1)
 x_l = b_l.solve()
 rec_l = b_l.reconstruct().squeeze()
 its_l = b_l.getitstat()
 
-b_t = comcbpdn.ComplexConvBPDN(s_clean_d[:, 0:M], s_test, lmbda / 2, opt=opt_par, dimK=None, dimN=1)
+b_t = comcbpdn.ComplexConvBPDN(s_clean_d[:, 0:M], s_test, lmbda/4 , opt=opt_par, dimK=None, dimN=1)
 x_t = b_t.solve()
 rec_t = b_t.reconstruct().squeeze()
 its_t = b_t.getitstat()
