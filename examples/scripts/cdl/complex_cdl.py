@@ -56,6 +56,8 @@ def evalerr_l(prm):
     x_1_l = x_0_l.squeeze()
     return (np.sum(np.abs(x_1_l)))
 
+plt.close('all')
+
 N = 64  # signal length
 M = 5 # filter number
 K = 20 * M # input signal number
@@ -100,18 +102,18 @@ s_test = s_test[:,np.newaxis]
 
 D0 = np.reshape(D0,(-1,1,1,M))
 D0_d = D0.squeeze()
-#
+
 # Parallel evaluation of error function on lmbda grid
-# lrng = np.logspace(-5,3,1000)
-# sprm, sfvl, fvmx, sidx = mpiutil.grid_search(evalerr, (lrng,))
-# lmbda = sprm[0]
-# print('Minimum ℓ1 error: %5.2f at 𝜆 = %.2e' % (sfvl, lmbda))
-# fig, ax = plot.subplots(figsize=(19.5, 8))
-# plot.plot(fvmx, x=lrng, ptyp='semilogx',title='original 𝜆 = %.2e' % lmbda, xlbl='$\lambda$',
-#           ylbl='Error', fig=fig)
-# fig.show()
-lmbda = 3.89
-#
+lrng = np.logspace(-5,3,1000)
+sprm, sfvl, fvmx, sidx = mpiutil.grid_search(evalerr, (lrng,))
+lmbda = sprm[0]
+print('Minimum ℓ1 error: %5.2f at 𝜆 = %.2e' % (sfvl, lmbda))
+fig, ax = plot.subplots(figsize=(19.5, 8))
+plot.plot(fvmx, x=lrng, ptyp='semilogx',title='original 𝜆 = %.2e' % lmbda, xlbl='$\lambda$',
+          ylbl='Error', fig=fig)
+fig.show()
+
+lmbda = lmbda/2
 cri = cnvrep.CDU_ConvRepIndexing(D0.shape, s_noise)
 
 optx = comcbpdn.ComplexConvBPDN.Options({'Verbose': False, 'MaxMainIter': 1,
@@ -138,7 +140,7 @@ xstep = comcbpdn.ComplexConvBPDN(D0n, s_noise, lmbda, optx)
 #Create D update object.
 dstep = comccmod.ComConvCnstrMOD(None, s_noise, D0.shape, optd, method='cns')
 #
-opt = dictlrn.DictLearn.Options({'Verbose': True, 'MaxMainIter':500})
+opt = dictlrn.DictLearn.Options({'Verbose': True, 'MaxMainIter': 1000})
 d = dictlrn.DictLearn(xstep, dstep, opt)
 D1 = d.solve()
 x = d.getcoef()
@@ -174,17 +176,17 @@ opt_par['FastSolve'] = False
 opt_par['Verbose'] = False
 
 # calculate sparse representation with initial, learned and ground truth dictionaries
-b_i = comcbpdn.ComplexConvBPDN(D0_d, s_test, lmbda/2, opt=opt_par, dimK=None, dimN=1)
+b_i = comcbpdn.ComplexConvBPDN(D0_d, s_test, lmbda, opt=opt_par, dimK=None, dimN=1)
 x_i = b_i.solve()
 rec_i = b_i.reconstruct().squeeze()
 its_i = b_i.getitstat()
 
-b_l = comcbpdn.ComplexConvBPDN(D1_d, s_test, lmbda/2 , opt=opt_par, dimK=None, dimN=1)
+b_l = comcbpdn.ComplexConvBPDN(D1_d, s_test, lmbda , opt=opt_par, dimK=None, dimN=1)
 x_l = b_l.solve()
 rec_l = b_l.reconstruct().squeeze()
 its_l = b_l.getitstat()
 
-b_t = comcbpdn.ComplexConvBPDN(s_clean_d[:, 0:M], s_test, lmbda/4 , opt=opt_par, dimK=None, dimN=1)
+b_t = comcbpdn.ComplexConvBPDN(s_clean_d[:, 0:M], s_test, lmbda , opt=opt_par, dimK=None, dimN=1)
 x_t = b_t.solve()
 rec_t = b_t.reconstruct().squeeze()
 its_t = b_t.getitstat()
@@ -257,6 +259,13 @@ plt.title('comparison')
 plt.legend()
 plt.show()
 x_b_plot = np.sum(x_i, axis=3).squeeze()
+
+plt.plot(s_test.real,label = 'input')
+plt.plot(rec_l.real, label = 'rec_l')
+
+plt.title('comparison')
+plt.legend()
+plt.show()
 
 # x_g_plot = np.sum(x_l, axis=3).squeeze()
 # x_a_plot = np.sum(x_t, axis=3).squeeze()
