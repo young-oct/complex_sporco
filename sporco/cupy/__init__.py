@@ -368,7 +368,8 @@ metric = sporco_cupy_patch_module('sporco.metric')
 
 # Construct sporco.cupy.util
 signal = sporco_cupy_patch_module('sporco.signal',
-            {'rfftn': fft.rfftn, 'irfftn': fft.rfftn, 'fftconv': fft.fftconv})
+            {'rfftn': fft.rfftn, 'irfftn': fft.irfftn,
+             'fftn': fft.fftn, 'ifftn': fft.ifftn,'fftconv': fft.fftconv})
 
 
 # Construct sporco.cupy.util
