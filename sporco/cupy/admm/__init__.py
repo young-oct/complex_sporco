@@ -140,8 +140,7 @@ admm.comcbpdn = sporco_cupy_patch_module('sporco.admm.comcbpdn',
                  'gradient_filters': signal.gradient_filters})
 
 
-def _index_primary(self):
-    return (Ellipsis, slice(0, -self.cri.Cd, None))
+
 
 
 
