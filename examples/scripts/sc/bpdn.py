@@ -76,7 +76,7 @@ def evalerr(prm):
 # Parallel evalution of error function on lmbda grid
 
 lrng = np.logspace(1, 2, 20)
-sprm, sfvl, fvmx, sidx = util.grid_search(evalerr, (lrng,))
+sprm, sfvl, fvmx, sidx = mpiutil.grid_search(evalerr, (lrng,))
 lmbda = sprm[0]
 
 print('Minimum ℓ1 error: %5.2f at 𝜆 = %.2e' % (sfvl, lmbda))

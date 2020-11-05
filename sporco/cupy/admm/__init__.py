@@ -132,6 +132,19 @@ admm.cbpdn.AddMaskSim.index_primary = _index_primary
 admm.cbpdn.AddMaskSim.index_addmsk = _index_addmsk
 
 
+# Construct sporco.cupy.admm.comcbpdn
+admm.comcbpdn = sporco_cupy_patch_module('sporco.admm.comcbpdn',
+                {'admm': admm.admm, 'cr': cnvrep, 'sl': linalg, 'sp': prox,
+                 'empty_aligned': fft.empty_aligned,
+                 'fl2norm2': fft.fl2norm2,
+                 'gradient_filters': signal.gradient_filters})
+
+
+def _index_primary(self):
+    return (Ellipsis, slice(0, -self.cri.Cd, None))
+
+
+
 # Construct sporco.cupy.admm.cbpdnin
 admm.cbpdnin = sporco_cupy_patch_module('sporco.admm.cbpdnin',
             {'cbpdn': admm.cbpdn, 'sl': linalg, 'sp': prox,

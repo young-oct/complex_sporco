@@ -201,9 +201,9 @@ def Complex_prox_l1(v, alpha):
         )
     else:
 
-
         #nan issue
         return (v/np.abs(v)) * (np.clip(np.abs(v) - alpha, 0, complex(float('inf'), float('inf'))))
+
 
 def norm_2l2(x, axis=None):
     r"""Compute the squared :math:`\ell_2` norm

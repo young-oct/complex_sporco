@@ -160,6 +160,6 @@ plot.plot(np.vstack((its.PrimalRsdl, its.DualRsdl)).T,
 plot.plot(its.Rho, xlbl='Iterations', ylbl='Penalty Parameter')
 
 
-
-# Wait for enter on keyboard
-input()
+#
+# # Wait for enter on keyboard
+# input()

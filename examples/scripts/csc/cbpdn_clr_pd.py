@@ -167,5 +167,5 @@ plot.plot(its.Rho, xlbl='Iterations', ylbl='Penalty Parameter', ax=ax[2],
 fig.show()
 
 
-# Wait for enter on keyboard
-input()
+# # Wait for enter on keyboard
+# input()
