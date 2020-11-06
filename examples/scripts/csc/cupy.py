@@ -9,7 +9,7 @@ from builtins import input
 import pyfftw   # See https://github.com/pyFFTW/pyFFTW/issues/40
 import numpy as np
 
-from sporco import signal
+# from sporco import signal
 from sporco import fft
 from sporco import metric
 from sporco import plot
@@ -18,6 +18,9 @@ from sporco.cupy import (cupy_enabled, np2cp, cp2np, select_device_by_load,
                          gpu_info)
 from sporco.cupy.admm import comcbpdn
 from pytictoc import TicToc
+from sporco.cupy import signal as si
+from scipy import signal
+from sporco.admm import comcbpdn
 
 N = 468  # signal length
 M = 2 # filter number
@@ -30,9 +33,10 @@ s_clean = np.zeros((N,K)).astype(np.complex)
 Dtemp = np.zeros((N,K)).astype(np.complex)
 # delta matrix to shift the Gaussian pulses
 delta = np.zeros((N)).astype(np.complex)
+delta_1 = np.zeros((N)).astype(np.complex)
 delta[-120] = 1
-
-alpha = signal.gaussian(200, std=30)
+delta_1[-70] = 1
+alpha = signal.gaussian(200, 30)
 # construct sine/cosine signal
 for i in range(K):
 
