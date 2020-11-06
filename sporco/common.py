@@ -15,7 +15,7 @@ import sys
 import re
 import collections
 import numpy as np
-
+import cupy as cp
 
 __author__ = """Brendt Wohlberg <brendt@ieee.org>"""
 
@@ -156,14 +156,15 @@ class IterativeSolver(with_metaclass(_IterSolver_Meta, object)):
         dtype : data-type
           Data type for working variables (overridden by 'DataType' option)
         """
-
+        xp = cp.get_array_module(opt,dtype)
         # Take no action of self.dtype exists and is not None
         if not hasattr(self, 'dtype') or self.dtype is None:
             # DataType option overrides explicitly specified data type
+
             if opt['DataType'] is None:
                 self.dtype = dtype
             else:
-                self.dtype = np.dtype(opt['DataType'])
+                self.dtype = xp.dtype(opt['DataType'])
 
 
 
