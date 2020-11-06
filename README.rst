@@ -113,13 +113,13 @@ The `development version <https://github.com/bwohlberg/sporco>`__ on GitHub can 
 
 ::
 
-    pip install git+https://github.com/bwohlberg/sporco
+    pip install git+https://github.com/young-oct/complex_sporco.git
 
 or by doing
 
 ::
 
-    git clone https://github.com/bwohlberg/sporco.git
+    git clone https://github.com/young-oct/complex_sporco.git
 
 followed by
 
