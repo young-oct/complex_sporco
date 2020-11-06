@@ -34,7 +34,7 @@ from matplotlib import pyplot as plt
 import random
 from numpy.fft import fft, fft2, ifft, ifft2
 from sklearn.metrics import r2_score
-import sinesignal
+# import sinesignal
 import pickle
 import copy
 from math import ceil

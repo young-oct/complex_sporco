@@ -171,6 +171,7 @@ s_train = s_noise[:,train_index]
 
 D0 =Dtemp[:,0:M]
 
+
 # Function computing reconstruction error at lmbda
 Maxiter = 500
 opt_par = cbpdn.ConvBPDN.Options({'FastSolve': True, 'Verbose': True, 'StatusHeader': False,
@@ -187,12 +188,27 @@ s_test = s_test[:,np.newaxis]
 D0 = np.reshape(D0,(-1,1,M))
 D0_d = D0.squeeze()
 
+if cupy_enabled():
+    print('CuPy/GPU device not available: running without GPU acceleration\n')
+
+# if not cupy_enabled():
+#     print('CuPy/GPU device not available: running without GPU acceleration\n')
+# else:
+#     id = select_device_by_load()
+#     info = gpu_info()
+#     if info:
+#         print('Running on GPU %d (%s)\n' % (id, info[id].name))
+
+
 lmbda = 0.01
+t = TicToc()
+t.tic()
 # calculate sparse representation with initial, learned and ground truth dictionaries as 1D signal
 b_i = cbpdn.ConvBPDN(np2cp(D0), np2cp(s_train), lmbda, opt=opt_par, dimK=1, dimN=1)
 x_i = cp2np(b_i.solve())
 rec_i = b_i.reconstruct().squeeze()
 its_i = b_i.getitstat()
+t.toc()
 # #
 # t.tic()
 # # for i in range(s_noise_d.shape[1]):
