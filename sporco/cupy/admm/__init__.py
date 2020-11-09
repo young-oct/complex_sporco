@@ -120,16 +120,6 @@ admm.cbpdn = sporco_cupy_patch_module('sporco.admm.cbpdn',
                  'gradient_filters': signal.gradient_filters})
 
 
-# Construct sporco.cupy.admm.comcbpdn
-admm.comcbpdn = sporco_cupy_patch_module('sporco.admm.comcbpdn',
-                {'admm': admm.admm, 'cr': cnvrep, 'sl': linalg, 'sp': prox,
-                 'fftn': fft.fftn, 'ifftn': fft.ifftn,
-                 'empty_aligned': fft.empty_aligned,
-                 'fl2norm2': fft.fl2norm2,
-                'L1Weight': cr.l1Wshape,
-                 'gradient_filters': signal.gradient_filters})
-
-
 def _index_primary(self):
     return (Ellipsis, slice(0, -self.cri.Cd, None))
 
@@ -140,13 +130,6 @@ def _index_addmsk(self):
 
 admm.cbpdn.AddMaskSim.index_primary = _index_primary
 admm.cbpdn.AddMaskSim.index_addmsk = _index_addmsk
-
-
-
-
-
-
-
 
 
 # Construct sporco.cupy.admm.cbpdnin

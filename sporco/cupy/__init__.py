@@ -88,12 +88,10 @@ def rsetattr(obj, name, value):
 
 def load_module(name):
     """Load the named module without registering it in ``sys.modules``.
-
     Parameters
     ----------
     name : string
       Module name
-
     Returns
     -------
     mod : module
@@ -111,7 +109,6 @@ def load_module(name):
 def patch_module(name, pname, pfile=None, attrib=None):
     """Create a patched copy of the named module and register it in
     ``sys.modules``.
-
     Parameters
     ----------
     name : string
@@ -122,7 +119,6 @@ def patch_module(name, pname, pfile=None, attrib=None):
       Value to assign as source file name of patched module
     attrib : dict or None, optional (default None)
       Dict of attribute names and values to assign to patched module
-
     Returns
     -------
     mod : module
@@ -149,14 +145,12 @@ def patch_module(name, pname, pfile=None, attrib=None):
 def sporco_cupy_patch_module(name, attrib=None):
     """Create a copy of the named sporco module, patch it to replace
     numpy with cupy, and register it in ``sys.modules``.
-
     Parameters
     ----------
     name : string
       Name of source module
     attrib : dict or None, optional (default None)
       Dict of attribute names and values to assign to patched module
-
     Returns
     -------
     mod : module
@@ -368,8 +362,7 @@ metric = sporco_cupy_patch_module('sporco.metric')
 
 # Construct sporco.cupy.util
 signal = sporco_cupy_patch_module('sporco.signal',
-            {'rfftn': fft.rfftn, 'irfftn': fft.irfftn,
-             'fftn': fft.fftn, 'ifftn': fft.ifftn,'fftconv': fft.fftconv})
+            {'rfftn': fft.rfftn, 'irfftn': fft.rfftn, 'fftconv': fft.fftconv})
 
 
 # Construct sporco.cupy.util
