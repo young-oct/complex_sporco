@@ -119,6 +119,14 @@ admm.cbpdn = sporco_cupy_patch_module('sporco.admm.cbpdn',
                  'rfl2norm2': fft.rfl2norm2,
                  'gradient_filters': signal.gradient_filters})
 
+# Construct sporco.cupy.admm.cbpdn
+admm.comcbpdn = sporco_cupy_patch_module('sporco.admm.comcbpdn',
+                {'admm': admm.admm, 'cr': cnvrep, 'sl': linalg, 'sp': prox,
+                 'fftn': fft.fftn, 'ifftn': fft.ifftn,
+                 'empty_aligned': fft.empty_aligned,
+                 'fl2norm2': fft.fl2norm2,
+                 'gradient_filters': signal.gradient_filters})
+
 
 def _index_primary(self):
     return (Ellipsis, slice(0, -self.cri.Cd, None))

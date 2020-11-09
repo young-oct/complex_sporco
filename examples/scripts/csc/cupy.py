@@ -16,7 +16,7 @@ from sporco import plot
 plot.config_notebook_plotting()
 from sporco.cupy import (cupy_enabled, np2cp, cp2np, select_device_by_load,
                          gpu_info)
-from sporco.cupy.admm import comcbpdn
+# from sporco.cupy.admm import comcbpdn
 from pytictoc import TicToc
 from sporco.cupy import signal as si
 from scipy import signal
