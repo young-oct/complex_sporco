@@ -25,8 +25,9 @@ from sporco.cupy import (cupy_enabled, np2cp, cp2np, select_device_by_load,
                          gpu_info)
 from sporco.cupy.admm import tvl1
 
-import cupy as cp
-cp._default_memory_pool.free_all_blocks()
+# from sporco.cupy import cp
+# mempool = cp.get_default_memory_pool()
+# cp._default_memory_pool.free_all_blocks()
 
 """
 Load reference image.
@@ -111,5 +112,7 @@ plot.plot(its.Rho, xlbl='Iterations', ylbl='Penalty Parameter', fig=fig)
 fig.show()
 
 
-# Wait for enter on keyboard
-input()
+
+
+
+

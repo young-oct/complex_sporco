@@ -1,26 +1,42 @@
 # -*- coding: utf-8 -*-
-# @Time    : 2020-11-06 11:56 a.m.
+# @Time    : 2020-11-09 8:12 p.m.
 # @Author  : young wang
-# @FileName: cupy.py
+# @FileName: convolution_dictionary.py
 # @Software: PyCharm
+"""
+The script solves complex convolutional basis pursuit denosing problem with ADMM consensus framework.
+The script is adapted from sporco.cupy.admm
+
+The input signal is 64 points long gaussian pulse trains at different locations
+1000 independent 64 points long gaussian pulse trains
+
+The initial dictionary is random number. After the dictionary learning
+the updated dictionary should be sine waves
+"""
+
 from __future__ import print_function
 from builtins import input
 
 import pyfftw   # See https://github.com/pyFFTW/pyFFTW/issues/40
 import numpy as np
 
-# from sporco import signal
+from sporco import util
+from sporco import signal as si
 from sporco import fft
 from sporco import metric
 from sporco import plot
 plot.config_notebook_plotting()
-from sporco.cupy import (cupy_enabled, np2cp, cp2np, select_device_by_load,
-                         gpu_info)
-# from sporco.cupy.admm import comcbpdn
-from pytictoc import TicToc
-from sporco.cupy import signal as si
-from scipy import signal
+# from sporco.cupy import (cupy_enabled, np2cp, cp2np, select_device_by_load,
+#                          gpu_info)
+# from sporco.cupy.admm import cbpdn,comcbpdn
 from sporco.admm import comcbpdn
+
+from matplotlib import pyplot as plt
+import random
+from pytictoc import TicToc
+from scipy import signal
+import GPUtil
+#
 
 N = 468  # signal length
 M = 2 # filter number
@@ -33,9 +49,11 @@ s_clean = np.zeros((N,K)).astype(np.complex)
 Dtemp = np.zeros((N,K)).astype(np.complex)
 # delta matrix to shift the Gaussian pulses
 delta = np.zeros((N)).astype(np.complex)
-delta_1 = np.zeros((N)).astype(np.complex)
 delta[-120] = 1
+
+delta_1 = np.zeros((N)).astype(np.complex)
 delta_1[-70] = 1
+
 alpha = signal.gaussian(200, 30)
 # construct sine/cosine signal
 for i in range(K):
@@ -70,6 +88,7 @@ for i in range(K):
 
 Nv = 650 # sample line index
 
+
 train_index = np.random.choice(s_noise.shape[1],int(0.1*K))
 s_train = s_noise[:,train_index]
 
@@ -77,25 +96,21 @@ D0 =Dtemp[:,0:M]
 
 # Function computing reconstruction error at lmbda
 Maxiter = 500
-opt_par = comcbpdn.ComplexGenericConvBPDN.Options({'FastSolve': True, 'Verbose': True, 'StatusHeader': False,
+opt_par = comcbpdn.ComplexConvBPDN.Options({'FastSolve': True, 'Verbose': True, 'StatusHeader': False,
                                             'MaxMainIter': Maxiter,'RelStopTol': 5e-5, 'AuxVarObj': True,
                                             'RelaxParam': 1.515,'AutoRho': {'Enabled': True}})
 
 s_clean = np.reshape(s_clean, (-1,1,K))
 s_noise = np.reshape(s_noise, (-1,1,K))
 s_train = np.reshape(s_train, (-1,1,len(train_index)))
-s = s_noise.squeeze()
+
 s_test = s_noise[:,:,Nv].squeeze()
 s_test = s_test[:,np.newaxis]
 
 D0 = np.reshape(D0,(-1,1,M))
 D0_d = D0.squeeze()
 
-t = TicToc()
-lmbda  = 0.01
-
-Kr = 0.05
-Maxiter = 30
+lmbda = 1.5e-2
 
 if not cupy_enabled():
     print('CuPy/GPU device not available: running without GPU acceleration\n')
@@ -105,10 +120,11 @@ else:
     if info:
         print('Running on GPU %d (%s)\n' % (id, info[id].name))
 
-
+t = TicToc()
 t.tic()
-# for i in range(s_noise_d.shape[1]):
-
-b_i_2d = comcbpdn.ComplexConvBPDN(cp2np(D0_d), cp2np(s), lmbda*Kr, opt=opt_par, dimK=1, dimN=1)
-# x_i_2d = cp2np( b_i_2d.solve())
+b = comcbpdn.ComplexConvBPDN(np2cp(D0_d), np2cp(s_noise), lmbda, opt_par, dimK=1, dimN = 1)
+X = cp2np(b.solve())
+GPUtil.showUtilization()
 t.toc()
+
+# mempool.free_all_blocks()

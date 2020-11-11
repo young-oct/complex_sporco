@@ -32,8 +32,6 @@ from sporco.cupy import (cupy_enabled, np2cp, cp2np, select_device_by_load,
                          gpu_info)
 from sporco.cupy.admm import cbpdn
 
-
-
 """
 Boundary artifacts are handled by performing a symmetric extension on the image to be denoised and then cropping the result to the original image support. This approach is simpler than the boundary handling strategies that involve the insertion of a spatial mask into the data fidelity term, and for many problems gives results of comparable quality. The functions defined here implement symmetric extension and cropping of images.
 """
@@ -161,6 +159,5 @@ plot.plot(np.vstack((its.PrimalRsdl, its.DualRsdl)).T,
 plot.plot(its.Rho, xlbl='Iterations', ylbl='Penalty Parameter')
 
 
-#
 # # Wait for enter on keyboard
 # input()
