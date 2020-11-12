@@ -24,7 +24,7 @@ from sporco import plot
 from matplotlib import pyplot as plt
 from pytictoc import TicToc
 from scipy import signal
-import GPUtil
+# v
 
 from sporco.cupy import (cupy_enabled, np2cp, cp2np, select_device_by_load,
                          gpu_info)
@@ -74,7 +74,7 @@ t.tic()
 b = comcbpdn.ComplexConvBPDN(np2cp(D0), np2cp(s_noise), lmbda, opt_par, dimK=1, dimN = 1)
 X = cp2np(b.solve())
 rec = cp2np(b.reconstruct().squeeze())
-GPUtil.showUtilization()
+# GPUtil.showUtilization()
 t.toc()
 
 plt.subplot(131)
