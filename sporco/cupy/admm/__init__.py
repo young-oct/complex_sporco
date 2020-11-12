@@ -56,7 +56,7 @@ def _update_rho(self, k, r, s):
                 rsf = rhomlt
             elif s > (mu / xi) * r:
                 rsf = 1.0 / rhomlt
-            self.rho = self.rho.real * float(rsf).real
+            self.rho *=  float(rsf)
             self.U /= rsf
             if rsf != 1.0:
                 self.rhochange()
