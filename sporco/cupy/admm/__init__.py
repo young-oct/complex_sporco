@@ -56,7 +56,7 @@ def _update_rho(self, k, r, s):
                 rsf = rhomlt
             elif s > (mu / xi) * r:
                 rsf = 1.0 / rhomlt
-            self.rho *=  float(rsf)
+            self.rho *= float(rsf)
             self.U /= rsf
             if rsf != 1.0:
                 self.rhochange()
@@ -117,14 +117,6 @@ admm.cbpdn = sporco_cupy_patch_module('sporco.admm.cbpdn',
                  'empty_aligned': fft.empty_aligned,
                  'rfftn_empty_aligned': fft.rfftn_empty_aligned,
                  'rfl2norm2': fft.rfl2norm2,
-                 'gradient_filters': signal.gradient_filters})
-
-# Construct sporco.cupy.admm.comcbpdn
-admm.comcbpdn = sporco_cupy_patch_module('sporco.admm.comcbpdn',
-                {'admm': admm.admm, 'cr': cnvrep, 'sl': linalg, 'sp': prox,
-                 'fftn': fft.fftn, 'ifftn': fft.ifftn,
-                 'empty_aligned': fft.empty_aligned,
-                 'fl2norm2': fft.fl2norm2,
                  'gradient_filters': signal.gradient_filters})
 
 

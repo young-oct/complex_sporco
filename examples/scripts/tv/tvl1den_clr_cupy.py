@@ -21,13 +21,11 @@ from sporco import util
 from sporco import signal
 from sporco import metric
 from sporco import plot
+plot.config_notebook_plotting()
 from sporco.cupy import (cupy_enabled, np2cp, cp2np, select_device_by_load,
                          gpu_info)
 from sporco.cupy.admm import tvl1
 
-# from sporco.cupy import cp
-# mempool = cp.get_default_memory_pool()
-# cp._default_memory_pool.free_all_blocks()
 
 """
 Load reference image.
